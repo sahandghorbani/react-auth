@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import {  useSelector } from 'react-redux';
 import { TextField, Button, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-// import { RootState } from '../store';
 import { dependencies, container } from "../inversify.config";
-import { ISetDispatch } from "../interface";
+import { ISetDispatch , IGetState } from "../interface";
 
 export type RootState = {
   AuthSlice: {
@@ -35,10 +34,11 @@ const LoginPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const { loading } = useSelector((state: RootState) => state.AuthSlice);
   const classes = useStyles();
-  const myDependency = container.get<ISetDispatch>(dependencies.ISetDispatch);
+  const dispatcher = container.get<ISetDispatch>(dependencies.ISetDispatch);
+  const getter = container.get<IGetState>(dependencies.IGetState);
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    myDependency.setDispatch(username , password)
+    dispatcher.setDispatch(username , password)
     setUsername('');
     setPassword('');
   };
@@ -74,6 +74,7 @@ const LoginPage: React.FC = () => {
           'Log In'
         )}
       </Button>
+      <h2>{getter.getState('AuthSlice' , 'error')}</h2>
     </form>
   );
 };
