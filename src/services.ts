@@ -1,14 +1,20 @@
 import { injectable } from "inversify";
 import { IGetState, ISetState, ISetDispatch } from "./interface";
 import store from "./store/index";
-import { loginUser } from "./store/Auth";
+import { loginUser , fethUserByToken , fetchAllUsers } from "./store/Auth";
+import { AuthState } from "./types/ITypes";
 
+type RootState = {
+  AuthSlice: AuthState;
+  // ...other slices
+};
 @injectable()
 export class GetStateService implements IGetState {
-  getState(slice: string, state: string): any {
-    return store.getState()[slice][`${state}`];
+  getState(slice: keyof RootState, state: keyof AuthState): any {
+    return store.getState()[slice][state] as any;
   }
 }
+
 
 @injectable()
 export class SetStateService implements ISetState {
@@ -21,6 +27,12 @@ export class SetStateService implements ISetState {
 export class SetDispatchService implements ISetDispatch {
   setDispatch(username:string , password:string): void {
     store.dispatch(loginUser(username , password));
+  }
+  setToken(token:string) {
+    store.dispatch(fethUserByToken(token));
+  }
+  setUsers() {
+    store.dispatch(fetchAllUsers());
   }
 }
 

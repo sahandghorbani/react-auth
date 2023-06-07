@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "types": ["react", "react-dom", "react-router-dom" , "@testing-library/react"],
     "composite": true,
     "skipLibCheck": true,
     "module": "ESNext",
