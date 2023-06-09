@@ -1,41 +1,31 @@
 import { dependencies, container } from "../inversify.config";
-import { IGetState, ISetDispatch } from "../interface";
+import { ISetDispatch } from "../interface";
 import { useEffect } from "react";
-import { UserData } from "../types/ITypes";
 import { useSelector } from "react-redux";
-// import { useDispatch } from "react-redux";
-// import { fetchAllUsers } from "../store/Auth";
+import { useNavigate } from "react-router-dom";
+import UserList from "../components/users/UserList";
 
 export type RootState = {
   AuthSlice: {
     loading: boolean;
   };
 };
+
 function Home() {
-  
-  // const dispatch = useDispatch()
-  const myDependency = container.get<IGetState>(dependencies.IGetState);
   const dispatcher = container.get<ISetDispatch>(dependencies.ISetDispatch);
 
   const users = useSelector((state: any) => state.AuthSlice.users);
+  const isUserLoggedIn = useSelector((state: any) => state.AuthSlice.user);
+  const navigate = useNavigate();
+
   useEffect(() => {
-    // dispatch(fetchAllUsers())
     dispatcher.setUsers();
-    // console.log(myDependency.getState("AuthSlice", "users"));
+    if (!isUserLoggedIn) {
+      navigate("/login");
+    }
   }, []);
 
-    // const users = myDependency.getState("AuthSlice", "users");
-
-  return (
-    <>
-      <ul>
-        {users &&
-          users.map((user: UserData, index: number) => (
-            <li key={index}>{user.username}</li>
-          ))}
-      </ul>
-    </>
-  );
+  return <UserList users={users} />;
 }
 
 export default Home;

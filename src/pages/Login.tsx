@@ -1,8 +1,9 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import LoginForm from "../components/LoginForm";
 import { dependencies, container } from "../inversify.config";
 import { ISetDispatch, IGetState } from "../interface";
+import TheSnackbar from "../components/ui/TheSnackbar";
+import LoginForm from "../components/form/LoginForm";
 
 const LoginPage: React.FC = () => {
   const { loading } = useSelector((state: any) => state.AuthSlice);
@@ -11,14 +12,17 @@ const LoginPage: React.FC = () => {
 
   const handleSubmit = (username: string, password: string) => {
     dispatcher.setDispatch(username, password);
-  };
-
+  }
+    
   return (
-    <LoginForm
-      onSubmit={handleSubmit}
-      loading={loading}
-      error={getter.getState("AuthSlice", "error")}
-    />
+    <>
+      <LoginForm
+        onSubmit={handleSubmit}
+        loading={loading}
+        message={getter.getState("AuthSlice", "message")}
+      />
+      <TheSnackbar message={getter.getState("AuthSlice", "message")} />
+    </>
   );
 };
 

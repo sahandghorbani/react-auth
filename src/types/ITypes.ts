@@ -4,22 +4,26 @@ export interface AppProviderProps {
 }
 
 export interface AuthState {
-    loading: boolean;
-    user: string | null;
-    token: string | null;
-    error: string | null;
-    users:UserData[]
-  }
+  loading: boolean;
+  user: string | null;
+  token: string | null;
+  message: string | null;
+  users: UserData[];
+}
 
-  export interface UserData {
-    username: string;
-    password: string;
-    token: string;
-    id?: number;
-  }
+export interface UserData {
+  username: string;
+  password: string;
+  token: string;
+  id?: number;
+}
 
-  export interface LoginFormProps {
-    onSubmit: (username: string, password: string) => void;
-    loading: boolean;
-    error: string | null;
-  }
+export interface LoginFormProps {
+  onSubmit: (username: string, password: string) => void;
+  loading: boolean;
+  message: string | null;
+}
+
+export type UserType = {
+  user: AuthState["user"];
+};

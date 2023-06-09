@@ -7,53 +7,60 @@ const initialState: AuthState = {
   loading: false,
   user: null,
   token: null,
-  error: null,
-  users:[]
+  message: null,
+  users: [],
 };
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setAllUsers(state ,action: PayloadAction<any>) {
-      state.users =action.payload ;
-      // console.log(state.users);
+    setAllUsers(state, action: PayloadAction<any>) {
+      state.users = action.payload;
     },
-    loginStart(state) {
+    AuthStart(state) {
       state.loading = true;
-      state.error = null;
+      state.message = null;
     },
-    loginSuccess(state, action: PayloadAction<UserData>) {
+    AuthSuccess(state, action: PayloadAction<any>) {
+      let { user, type } = action.payload;
       state.loading = false;
-      state.user = action.payload.username;
-      state.token = action.payload.token;
-      localStorage.setItem("token", action.payload.token);
+      state.user = user.username;
+      state.token = user.token;
+      state.message = type === "exist" ? "Login successful" : "registered";
+      localStorage.setItem("token", user.token);
       // console.log(state.user);
     },
-    loginFailure(state, action: PayloadAction<string>) {
+    AuthFailure(state, action: PayloadAction<string>) {
       state.loading = false;
-      state.error = action.payload;
+      state.message = action.payload;
+    },
+    logoutUser(state) {
+      state.loading = false;
+      state.user = null;
+      state.token = null;
+      state.message = "logged out";
+      localStorage.removeItem("token");
     },
   },
 });
 
-export const { loginStart, loginSuccess, loginFailure,setAllUsers } = authSlice.actions;
+export const { AuthStart, AuthSuccess, AuthFailure, setAllUsers, logoutUser } =
+  authSlice.actions;
 
 export const loginUser = (username: string, password: string) => {
   return async (dispatch: Dispatch) => {
-    dispatch(loginStart());
+    dispatch(AuthStart());
 
     try {
       const users = await fetchUsers();
-
       const user = findUserByUsername(users, username);
-
       if (user) {
         if (validatePassword(user, password)) {
-          dispatch(loginSuccess(user));
+          dispatch(AuthSuccess({ user, type: "exist" }));
           return true;
         } else {
-          dispatch(loginFailure("username exist but incorrect password"));
+          dispatch(AuthFailure("username exist but incorrect password"));
           return false;
         }
       } else {
@@ -62,17 +69,11 @@ export const loginUser = (username: string, password: string) => {
           password,
           token: Math.random().toString(36).substring(7),
         };
-
-        // const response = await addUser(newUser);
-        const response = await axios.post(
-          "http://localhost:3001/users",
-          newUser
-        );
-
-        dispatch(loginSuccess(response.data));
+        const response = await addUser(newUser);
+        dispatch(AuthSuccess({ user: response, type: "new" }));
       }
     } catch (error: any) {
-      dispatch(loginFailure(error.message));
+      dispatch(AuthFailure(error.message));
       return false;
     }
   };
@@ -83,10 +84,9 @@ export const fethUserByToken = (token: string) => {
   return async (dispatch: Dispatch) => {
     try {
       let user = await fetchUser(token);
-      dispatch(loginSuccess(user));
+      dispatch(AuthSuccess({ user, type: "exist" }));
     } catch (error: any) {
-      dispatch(loginFailure(error.message));
-      console.error("Error fetching data:", error);
+      dispatch(AuthFailure(error.message));
     }
   };
 };
@@ -97,8 +97,7 @@ export const fetchAllUsers = () => {
       const users = await fetchUsers();
       dispatch(setAllUsers(users));
     } catch (error: any) {
-      dispatch(loginFailure(error.message));
-      console.error("Error fetching data:", error);
+      dispatch(AuthFailure(error.message));
     }
   };
 };
@@ -123,9 +122,9 @@ const fetchUser = async (token: string) => {
   return user;
 };
 
-// const addUser = async (user: UserData) => {
-//   const response = await axios.post("http://localhost:3001/users", user);
-//   return response.data;
-// };
+const addUser = async (user: UserData) => {
+  const response = await axios.post("http://localhost:3001/users", user);
+  return response.data;
+};
 
 export default authSlice.reducer;
