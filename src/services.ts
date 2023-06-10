@@ -1,7 +1,7 @@
 import { injectable } from "inversify";
 import { IGetState, ISetState, ISetDispatch } from "./interface";
 import store from "./store/index";
-import { loginUser , fethUserByToken , fetchAllUsers } from "./store/Auth";
+import { loginUser , fethUserByToken , fetchAllUsers, logoutUser } from "./store/Auth";
 import { AuthState } from "./types/ITypes";
 
 type RootState = {
@@ -33,6 +33,9 @@ export class SetDispatchService implements ISetDispatch {
   }
   setUsers() {
     store.dispatch(fetchAllUsers());
+  }
+  logout() {
+    store.dispatch(logoutUser())
   }
 }
 

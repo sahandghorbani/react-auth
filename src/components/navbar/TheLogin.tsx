@@ -3,8 +3,6 @@ import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { UserType } from "../../types/ITypes";
 
-
-
 const TheLogin: React.FC<UserType> = ({ user }) => {
   const navigate = useNavigate();
 

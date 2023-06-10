@@ -18,7 +18,7 @@ const TheSnackbar: React.FC<TheSnackbarProps> = ({ message }) => {
   }, [message]);
 
   const handleClose = (
-    event: SyntheticEvent<Element, Event>,
+    _event: SyntheticEvent<Element, Event>,
     reason?: string
   ) => {
     if (reason === "clickaway") {

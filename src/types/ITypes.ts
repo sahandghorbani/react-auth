@@ -21,9 +21,12 @@ export interface UserData {
 export interface LoginFormProps {
   onSubmit: (username: string, password: string) => void;
   loading: boolean;
-  message: string | null;
 }
 
 export type UserType = {
   user: AuthState["user"];
 };
+
+export interface RootState {
+  AuthSlice: AuthState;
+}

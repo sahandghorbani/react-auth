@@ -1,50 +1,45 @@
-import { render, screen } from '@testing-library/react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { render } from '@testing-library/react';
+import { dependencies, container } from '../inversify.config';
+import { ISetDispatch } from '../interface';
+import { MemoryRouter, useNavigate } from 'react-router-dom';
 import Home from './Home';
+import { Provider } from 'react-redux';
+import store from '../store';
 
-test('renders home page', () => {
-  render(
-    <Router>
-      <Home />
-    </Router>
-  );
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: jest.fn(),
+}));
 
+describe('Home', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
 
-  const loginLink = screen.getByText('login');
-  expect(loginLink).toBeInTheDocument();
-});
+  it('should call the setUsers method from the dispatcher', () => {
+    // Mock the dependencies and behaviors
+    const mockSetDispatch: ISetDispatch = {
+      setDispatch: jest.fn(),
+      setToken: jest.fn(),
+      logout: jest.fn(),
+      setUsers: jest.fn(),
+    };
 
+    const mockNavigate = jest.fn();
+    (useNavigate as jest.Mock).mockReturnValue(mockNavigate);
 
-test.skip('renders home page with user list when token is present', () => {
-  // Mock the user data
-  const users = [
-    {
-      "username": "abc",
-      "password": "abc123",
-      "token": "6nyaiah",
-      "id": 1
-    },
-  ];
+    container.rebind<ISetDispatch>(dependencies.ISetDispatch).toConstantValue(mockSetDispatch);
 
-  // Mock the behavior of localStorage.getItem() to return a token
-  jest.spyOn(window.localStorage, 'getItem').mockReturnValue('token');
+    render(
+        <MemoryRouter>
+          <Provider store={store}>
+            <Home />
+          </Provider>
+        </MemoryRouter>
+      );
 
-  // Render the component within a router
-  render(
-    <Router>
-      <Home />
-    </Router>
-  );
+    expect(mockSetDispatch.setUsers).toHaveBeenCalled();
 
-  // Assert that the home page content is rendered
-  const homePageElement = screen.getByTestId('home-page');
-  expect(homePageElement).toBeInTheDocument();
-
-  // Assert that the user list is rendered
-  const userListElement = screen.getByTestId('user-list');
-  expect(userListElement).toBeInTheDocument();
-
-  // Assert that the correct number of list items is rendered
-  const listItemElements = screen.getAllByTestId('list-item');
-  expect(listItemElements).toHaveLength(users.length);
+    expect(mockNavigate).toHaveBeenCalledWith('/login');
+  });
 });

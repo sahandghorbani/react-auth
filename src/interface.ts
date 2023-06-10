@@ -17,6 +17,7 @@ export interface ISetDispatch {
   setDispatch: (username: string, password: string) => void;
   setToken: (token: string) => void;
   setUsers: () => void;
+  logout:()=>void
 }
 
 // export interface IFetchToken {

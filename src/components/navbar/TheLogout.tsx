@@ -1,22 +1,21 @@
 import React from "react";
 import { Button } from "@mui/material";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { logoutUser } from "../../store/Auth";
 import { UserType } from "../../types/ITypes";
+import { container, dependencies } from "../../inversify.config";
+import { ISetDispatch } from "../../interface";
 
 
 
 const TheLogout: React.FC<UserType> = ({ user }) => {
-  const dispatch = useDispatch();
+
+  const dispatcher = container.get<ISetDispatch>(dependencies.ISetDispatch);
   const navigate = useNavigate()
 
   const handleLogout = () => {
-    dispatch(logoutUser()); 
+    dispatcher.logout()
     navigate('/login')
-    
   };
-
   return (
     <div>
       {user && (
