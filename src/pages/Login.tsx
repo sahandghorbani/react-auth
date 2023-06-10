@@ -19,7 +19,6 @@ const LoginPage: React.FC = () => {
       <LoginForm
         onSubmit={handleSubmit}
         loading={loading}
-        message={getter.getState("AuthSlice", "message")}
       />
       <TheSnackbar message={getter.getState("AuthSlice", "message")} />
     </>
