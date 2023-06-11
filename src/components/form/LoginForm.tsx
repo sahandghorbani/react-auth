@@ -2,32 +2,29 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, CircularProgress, TextField } from "@material-ui/core";
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
 import { LoginFormProps } from "../../types/ITypes";
 import { Container, Grid } from "@mui/material";
+import { useSelector } from "react-redux";
 
 type userForm = {
   username: string;
   password: string;
 };
 
-const LoginForm: React.FC<LoginFormProps> = ({
-  onSubmit,
-  loading,
-  
-}) => {
-  const succeed = useSelector((state: any) => state.AuthSlice.message);
+const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, loading }) => {
+  const succeed = useSelector((state:any) => state.AuthSlice.message);
   const {
-    handleSubmit,
     register,
     reset,
+    getValues,
     formState: { errors },
   } = useForm<userForm>({ mode: "onChange" });
 
   const navigate = useNavigate();
 
-  const onFormSubmit = (data: userForm) => {
-    onSubmit(data.username, data.password);
+  const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    onSubmit(getValues()['username'] , getValues()['password']);
   };
   useEffect(() => {
     if (succeed === "registered" || succeed === "Login successful") {
@@ -38,7 +35,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
 
   return (
     <Container maxWidth="lg">
-      <form onSubmit={handleSubmit(onFormSubmit)}>
+      <form onSubmit={onFormSubmit}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <TextField
@@ -84,7 +81,6 @@ const LoginForm: React.FC<LoginFormProps> = ({
               type="submit"
               variant="contained"
               color="primary"
-              disabled={loading}
               fullWidth
             >
               {loading ? (
@@ -96,6 +92,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
           </Grid>
         </Grid>
       </form>
+
     </Container>
   );
 };

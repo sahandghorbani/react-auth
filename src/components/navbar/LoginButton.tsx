@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { UserType } from "../../types/ITypes";
 
-const TheLogin: React.FC<UserType> = ({ user }) => {
+const LoginButton: React.FC<UserType> = ({ user }) => {
   const navigate = useNavigate();
 
   const handleLogin = () => {
@@ -21,4 +21,4 @@ const TheLogin: React.FC<UserType> = ({ user }) => {
   
 };
 
-export default TheLogin;
+export default LoginButton;

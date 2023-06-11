@@ -1,3 +1,4 @@
+import { FC } from "react";
 import { AppProviderProps } from "../types/ITypes";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -13,7 +14,7 @@ const theme = createTheme({
 
 
 // AppProvider component
-const AppProvider = ({ children }: AppProviderProps) => {
+const AppProvider:FC<AppProviderProps> = ({ children} ) => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />

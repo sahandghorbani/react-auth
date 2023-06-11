@@ -7,7 +7,7 @@ import { ISetDispatch } from "../../interface";
 
 
 
-const TheLogout: React.FC<UserType> = ({ user }) => {
+const LogoutButton: React.FC<UserType> = ({ user }) => {
 
   const dispatcher = container.get<ISetDispatch>(dependencies.ISetDispatch);
   const navigate = useNavigate()
@@ -27,4 +27,4 @@ const TheLogout: React.FC<UserType> = ({ user }) => {
   );
 };
 
-export default TheLogout;
+export default LogoutButton;

@@ -17,7 +17,9 @@ export interface UserData {
   token: string;
   id?: number;
 }
-
+export interface UserListProps {
+  users:UserData[]
+}
 export interface LoginFormProps {
   onSubmit: (username: string, password: string) => void;
   loading: boolean;

@@ -8,7 +8,8 @@
     "build": "tsc -p tsconfig.prod.json && vite build",
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "test": "jest --config=jest.config.cjs"
+    "test": "jest --config=jest.config.cjs" ,
+    "test:coverage": "jest --coverage"
   },
   "dependencies": {
     "@emotion/react": "^11.11.0",

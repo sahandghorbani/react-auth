@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { container } from '../../inversify.config';
 import { MemoryRouter } from 'react-router-dom';
-import TheLogout from './TheLogout';
+import TheLogout from './LogoutButton';
 
 
 const logoutMock = jest.fn();

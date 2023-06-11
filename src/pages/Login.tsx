@@ -13,6 +13,7 @@ const LoginPage: React.FC = () => {
   const handleSubmit = (username: string, password: string) => {
     dispatcher.setDispatch(username, password);
   }
+
     
   return (
     <>

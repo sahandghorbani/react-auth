@@ -4,6 +4,7 @@ import Snackbar from "@mui/material/Snackbar";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 
+
 interface TheSnackbarProps {
   message: string | null;
 }
@@ -19,11 +20,7 @@ const TheSnackbar: React.FC<TheSnackbarProps> = ({ message }) => {
 
   const handleClose = (
     _event: SyntheticEvent<Element, Event>,
-    reason?: string
   ) => {
-    if (reason === "clickaway") {
-      return;
-    }
     setOpen(false);
   };
 
@@ -46,6 +43,7 @@ const TheSnackbar: React.FC<TheSnackbarProps> = ({ message }) => {
   return (
     <div>
       <Snackbar
+       data-testid="the-snackbar"
         sx={{
           backgroundColor: "grey",
           "& .MuiSnackbarContent-root": {
@@ -54,7 +52,7 @@ const TheSnackbar: React.FC<TheSnackbarProps> = ({ message }) => {
         }}
         open={open}
         autoHideDuration={6000}
-        onClose={handleClose}
+        onClick={handleClose}
         message={message}
         action={action}
       />

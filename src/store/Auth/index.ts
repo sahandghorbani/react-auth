@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {  createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import { Dispatch } from "redux";
 import { AuthState, UserData } from "../../types/ITypes";
@@ -116,15 +116,17 @@ const validatePassword = (user: UserData, password: string) => {
 };
 
 const fetchUser = async (token: string) => {
-  const response = await axios.get("http://localhost:3001/users");
-  const users = response.data;
-  const user = users.find((user: UserData) => user.token === token);
+  const {data} = await axios.get("http://localhost:3001/users");
+  const user = data.find((user: UserData) => user.token === token);
   return user;
 };
 
 const addUser = async (user: UserData) => {
+  
   const response = await axios.post("http://localhost:3001/users", user);
   return response.data;
 };
 
 export default authSlice.reducer;
+
+

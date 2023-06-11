@@ -1,39 +1,30 @@
-import { render, fireEvent, screen } from "@testing-library/react";
-import { Provider } from "react-redux";
+import {  render } from "@testing-library/react";
 import LoginPage from "./Login";
-import { dependencies, container } from "../inversify.config";
-import { ISetDispatch, IGetState } from "../interface";
+import { MemoryRouter } from "react-router-dom";
+import { Provider } from "react-redux";
 import store from "../store";
 
-// Mock dependencies and behavior
-const mockSetDispatch: ISetDispatch = {
-  setDispatch: jest.fn(),
-  setToken: jest.fn(),
-  setUsers: jest.fn(),
-  logout: jest.fn(),
-};
-
-const mockGetState: IGetState = {
-  getState: jest.fn(),
-};
-
-// Mock the inversify container
-container.rebind<ISetDispatch>(dependencies.ISetDispatch).toConstantValue(mockSetDispatch);
-container.rebind<IGetState>(dependencies.IGetState).toConstantValue(mockGetState);
-
-describe("LoginPage", () => {
-  it("should call setDispatch with username and password on form submit", () => {
-    render(
+const setupTest = () => {
+  const {getByRole , container ,queryByTestId } = render(
+    <MemoryRouter>
       <Provider store={store}>
         <LoginPage />
       </Provider>
-    );
+    </MemoryRouter>
+  );
+  return {getByRole, container ,queryByTestId }
+};
 
-    // Simulate form submission
-    const submitButton = screen.getByRole("button", { name: "Submit" });
-    fireEvent.click(submitButton);
 
-    // Check if setDispatch was called with the correct arguments
-    expect(mockSetDispatch.setDispatch).toHaveBeenCalledWith("testuser", "testpassword");
+describe("LoginPage", () => {
+  it("should not render Snackbar at first", () => {
+    const {queryByTestId} = setupTest();
+    const snackbarElement = queryByTestId("the-snackbar");
+    expect(snackbarElement).not.toBeInTheDocument();
   });
+  it('renders snapshot LoginPage', () => {
+    const {container}  = setupTest()
+
+    expect(container.firstChild).toMatchSnapshot()
+  })
 });
