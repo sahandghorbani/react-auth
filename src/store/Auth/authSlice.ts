@@ -35,17 +35,17 @@ const authSlice = createSlice({
       state.loading = false;
       state.message = action.payload;
     },
-    logoutUser(state) {
-      state.loading = false;
-      state.user = null;
-      state.token = null;
-      state.message = "logged out";
-      localStorage.removeItem("token");
-    },
+    // logoutUser(state) {
+    //   state.loading = false;
+    //   state.user = null;
+    //   state.token = null;
+    //   state.message = "logged out";
+    //   localStorage.removeItem("token");
+    // },
   },
 });
 
-export const { AuthStart, AuthSuccess, AuthFailure, setAllUsers, logoutUser } =
+export const { AuthStart, AuthSuccess, AuthFailure, setAllUsers } =
   authSlice.actions;
 
 export default authSlice.reducer;

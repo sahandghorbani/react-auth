@@ -11,8 +11,8 @@ type userForm = {
   password: string;
 };
 
-const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, loading }) => {
-  const succeed = useSelector((state:any) => state.AuthSlice.message);
+const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, loading  , message}) => {
+  // const succeed = useSelector((state:any) => state.AuthSlice.message);
   const {
     register,
     reset,
@@ -24,14 +24,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, loading }) => {
 
   const onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    onSubmit(getValues()['username'] , getValues()['password']);
+     onSubmit(getValues()['username'] , getValues()['password']);
   };
   useEffect(() => {
-    if (succeed === "registered" || succeed === "Login successful") {
+    if (message === "Success") {
       reset();
       navigate("/");
     }
-  }, [succeed, reset]);
+  }, [message, reset]);
 
   return (
     <Container maxWidth="lg">

@@ -1,32 +1,37 @@
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
 import LogoutButton from "./LogoutButton";
 import LoginButton from "./LoginButton";
-import { ISetDispatch } from "../../interface";
-import { container, dependencies } from "../../inversify.config";
+import { useGetUserByIdQuery } from "../../redux/usersApi";
+import { useSelector } from "react-redux";
 
 export default function TheNavbar() {
-  const user = useSelector((state: any) => state.AuthSlice.user);
-  const dispatcher = container.get<ISetDispatch>(dependencies.ISetDispatch);
+  //acts  like computed properties ; it does return the fulfied vaue
+  const user = useSelector((state: any) => state.auth.user);
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      dispatcher.setToken(token);
-    }
-  }, []);
-
+  const token = localStorage.getItem("token");
+  let {data ,isLoading} = useGetUserByIdQuery(token);
+  console.log('re-render' , token);
+  
+  
+  
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar sx={{ justifyContent: "space-between" }}>
-          <LogoutButton user={user} />
-          <LoginButton user={user} />
-        </Toolbar>
-      </AppBar>
-    </Box>
+    <>
+        <Box sx={{ flexGrow: 1 }}>
+          <AppBar position="static">
+            <Toolbar sx={{ justifyContent: "space-between" }}>
+              {isLoading ? (
+                <span>Loading...</span>
+              ) : (
+                <>
+                  <LogoutButton user={user} />
+                  <LoginButton user={user} />
+                </>
+              )}
+            </Toolbar>
+          </AppBar>
+        </Box>
+    </>
   );
 }

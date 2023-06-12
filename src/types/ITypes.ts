@@ -18,11 +18,12 @@ export interface UserData {
   id?: number;
 }
 export interface UserListProps {
-  users: UserData[];
+  users: any;
 }
 export interface LoginFormProps {
   onSubmit: (username: string, password: string) => void;
   loading: boolean;
+  message:string | null;
 }
 
 export type UserType = {

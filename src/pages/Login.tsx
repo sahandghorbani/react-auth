@@ -1,27 +1,22 @@
 import React from "react";
-import { useSelector } from "react-redux";
-import { dependencies, container } from "../inversify.config";
-import { ISetDispatch, IGetState } from "../interface";
 import TheSnackbar from "../components/ui/TheSnackbar";
 import LoginForm from "../components/form/LoginForm";
+import { useLoginUserMutation } from "../redux/usersApi";
 
 const LoginPage: React.FC = () => {
-  const { loading } = useSelector((state: any) => state.AuthSlice);
-  const dispatcher = container.get<ISetDispatch>(dependencies.ISetDispatch);
-  const getter = container.get<IGetState>(dependencies.IGetState);
+  const [loginUser, { isLoading, isError, isSuccess }] = useLoginUserMutation();
+  const handleSubmit = async (username: string, password: string) => {
+    await loginUser({ username, password });
+  };
 
-  const handleSubmit = (username: string, password: string) => {
-    dispatcher.setDispatch(username, password);
-  }
-
-    
   return (
     <>
       <LoginForm
         onSubmit={handleSubmit}
-        loading={loading}
+        loading={isLoading}
+        message={isSuccess ? "Success" : "Error occurred"}
       />
-      <TheSnackbar message={getter.getState("AuthSlice", "message")} />
+      <TheSnackbar message={isSuccess ? "Success" : "Error occurred"} />
     </>
   );
 };
