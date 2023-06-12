@@ -18,7 +18,7 @@ export interface UserData {
   id?: number;
 }
 export interface UserListProps {
-  users:UserData[]
+  users: UserData[];
 }
 export interface LoginFormProps {
   onSubmit: (username: string, password: string) => void;
@@ -31,4 +31,9 @@ export type UserType = {
 
 export interface RootState {
   AuthSlice: AuthState;
+}
+
+export interface AuthPayload {
+  user: UserData;
+  type: string;
 }

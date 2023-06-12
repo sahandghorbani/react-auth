@@ -1,7 +1,7 @@
 import { GetStateService, SetStateService, SetDispatchService } from "./services";
 import store from "./store";
-import {  logoutUser } from "./store/Auth/index";
 import "reflect-metadata";
+import { logoutUser } from "./store/Auth/authSlice";
 
 describe("GetStateService", () => {
   let getStateService: GetStateService;

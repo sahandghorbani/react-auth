@@ -1,8 +1,9 @@
 import { injectable } from "inversify";
 import { IGetState, ISetState, ISetDispatch } from "./interface";
 import store from "./store/index";
-import { loginUser , fethUserByToken , fetchAllUsers, logoutUser } from "./store/Auth";
 import { AuthState } from "./types/ITypes";
+import { fetchAllUsers, fethUserByToken, loginUser } from "./store/Auth";
+import { logoutUser } from "./store/Auth/authSlice";
 
 type RootState = {
   AuthSlice: AuthState;
